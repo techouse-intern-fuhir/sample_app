@@ -1,0 +1,14 @@
+<% provide(:title, 'All users') %>
+<h1>All users</h1>
+
+  <%# userビューのコードを中から@usersオブジェクトを自動的に見つけ出し、それから他のページネーションリンクを作成 %>
+  <%# ※ will_paginateはpaginateっメソッドで得た結果が必要 %>
+  <%= will_paginate %>
+
+  <ul class="users">
+        <%# Railsは@usersをUserオブジェクトのリストであると推測する %>
+        <%# renderにユーザーのコレクションを渡してよびだすと、Railsは自動的にユーザーのコレクションを列挙し、それぞれのユーザーをパーシャルに渡す %>
+        <%= render @users %>
+  </ul>
+
+  <%= will_paginate %>

@@ -32,6 +32,10 @@ module SessionsHelper
     end
   end
   
+  #渡されたユーザーがカレントユーザーであればtrueを返す
+  def current_user?(user)
+    user && user == current_user
+  end
   
   #if user loged in then true, if other false, is sent
   def logged_in?
@@ -50,6 +54,12 @@ module SessionsHelper
     forget(current_user)
     reset_session
     @current_user = nil
+  end
+
+  #アクセスしようとしたURL保存する
+  def store_location
+    #ログインしていないユーザーがフォームから送信した場合は、転送先のURLを保存しないようにgetメソッドだけを指定
+    session[:forwarding_url] = request.original_url if request.get?
   end
 
 end

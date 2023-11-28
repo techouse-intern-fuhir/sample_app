@@ -14,6 +14,9 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 
+  #テスト環境用にsession処理やショートカット処理を作成する
+
+
   #テストユーザーがログイン中の場合にtrueを返す
   def is_logged_in?
     !session[:user_id].nil?
