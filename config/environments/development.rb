@@ -44,6 +44,9 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  host = 'solid-yodel-7vvrg4wr6xqqfpjqj-3000.app.github.dev'     # クラウドIDE
+  config.action_mailer.default_url_options = { host: host, protocol: 'https' }
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

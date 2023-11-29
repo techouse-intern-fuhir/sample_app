@@ -98,3 +98,8 @@ class RememberingTest < UsersLogin
   end
 
 end
+
+#setupをclassで共有することで初期設定の重複追記を防ぐ
+#もし単純にsetupを一つ書いてしまうと失敗して欲しいtestにも効果を及ぼしてしまう可能性があるため
+#classに分けてそれぞれのクラスがsuperで呼び出している
+#末尾にTestとついたクラスはminitestで全て実行されてしまうため、setupだけのクラスは末尾にTestをつけない
