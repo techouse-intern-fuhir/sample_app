@@ -7,6 +7,8 @@ class SessionsController < ApplicationController
     if @user && @user.authenticate(params[:session][:password])
       if @user.activated?
         forwarding_url = session[:forwarding_url]
+        #セッション固定（攻撃者が既に持っているセッションIDをユーザーに使わせるように仕向ける）を回避するためsessionをリセットする
+        #session storeの中身を全て削除する（攻撃者が指定したidを使わせるようなプログラムが組み込まれている可能性がある）
         reset_session
         params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
         log_in @user
