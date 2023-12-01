@@ -16,6 +16,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
     redirect_to root_url and return unless @user.activated?
   end
 
@@ -58,21 +59,12 @@ class UsersController < ApplicationController
   private
 
     def user_params
+      #paramsの中から許されている要素だけを取り出して改めてハッシュとして返している
       params.require(:user).permit(:name, :email, :password,
                                    :password_confirmation)
     end
 
     #beforeフィルタ
-
-    #ログイン済みユーザーがどうか確認
-    #deleteテストでも使われるためため整合性をあわせるためのstatus: :see_other
-    def logged_in_user
-      unless logged_in?
-        store_location
-        flash[:danger] = "Please log in."
-        redirect_to login_url, status: :see_other
-      end
-    end
 
     #login情報とurlが同一か確認
     def correct_user

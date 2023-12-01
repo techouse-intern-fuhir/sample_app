@@ -1,0 +1,12 @@
+<%= form_with(model: @micropost) do |f| %>
+  <%# f.object→formのブロック変数に対して使用する事でブロック内でモデルオブジェクトを呼び出す事が出来る。 %>
+  <%# f.objectは、form_withが持っている変数を使っているということ %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <div class="field">
+    <%= f.text_area :content, placeholder: "Compose new micropost..." %>
+  </div>
+  <%= f.submit "Post", class: "btn btn-primary" %>
+  <span class="image" >
+    <%= f.file_field :image, accept: "image/jpeg,image/gif,image/png" %>
+  </span>
+<% end %>

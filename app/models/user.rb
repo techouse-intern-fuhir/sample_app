@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  #dependent destroy→ユーザーの破壊と同時にマイクロポストも破壊
+  has_many :microposts, dependent: :destroy
   #仮想remember_tokenを作成
   attr_accessor :remember_token, :activation_token, :reset_token
 
@@ -92,6 +94,14 @@ class User < ApplicationRecord
   #パスワード再設定の期限が切れている場合はtrueを返す
   def password_reset_expired?
     reset_sent_at < 2.hour.ago
+  end
+
+  #試作feedの定義
+  #Micropost.where("user_id = ?", id)→ micropostsと同じ意味
+  #users画面でmicropostを利用するため
+  def feed
+    #?があることで、SQLクエリに代入する前にidがエスケープされるため、SQLインジェクション（SQL Injection）と呼ばれる深刻なセキュリティホールを回避できる
+    Micropost.where("user_id = ?", id)
   end
 
   private

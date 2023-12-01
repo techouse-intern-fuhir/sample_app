@@ -1,0 +1,11 @@
+<% if @feed_items.any? %>
+  <ol class="microposts" >
+    <%# @feed_itemsの各要素がMicropostクラスを持っていたため、RailsはMicropostのパーシャルを呼び出すことができる %>
+    <%# railsが遠くから合致するパーシャルを探し出してくれる %>
+    <%# app/views/microposts/_micropost.html.erb %>
+    <%= render @feed_items %>
+  </ol>
+  <%# paginateメソッドがmicropostsコントローラーの中で呼ばれているため再度呼び出しがmicropostsコントローラーのindexメソッド %>
+  <%# に設定されているため、それを変更する %>
+  <%= will_paginate @feed_items, params: { controller: :static_pages, action: :home } %>
+<% end %>

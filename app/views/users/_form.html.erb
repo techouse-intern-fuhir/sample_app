@@ -1,6 +1,6 @@
 <%# form_withはUser.new_record?で渡ってきた@userがデータベースに存在するか否かを確認してpost処理にするか、patch処理にするか決めている %>
 <%= form_with(model: @user) do |f| %>
-  <%= render 'shared/error_messages', object: @user %>
+  <%= render 'shared/error_messages', object: f.object %>
 
   <%= f.label :name %>
   <%= f.text_field :name, class: 'form-control' %>

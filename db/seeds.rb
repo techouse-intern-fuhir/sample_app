@@ -19,3 +19,13 @@ User.create!(name:  name,
     activated: true,
     activated_at: Time.zone.now)
 end
+
+
+# ユーザーの一部を対象にマイクロポストを生成する
+#takeでorder順で情報をデータベースから呼び出している
+users = User.order(:created_at).take(6)
+50.times do
+  #Lorem.sentence→ダミーデータの生成
+  content = Faker::Lorem.sentence(word_count: 5)
+  users.each { |user| user.microposts.create!(content: content) }
+end
