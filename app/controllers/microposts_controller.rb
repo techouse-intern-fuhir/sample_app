@@ -3,9 +3,11 @@ class MicropostsController < ApplicationController
   before_action :correct_user, only: :destroy
 
   def create
+    #ここではcontentだけが格納されている
     @micropost = current_user.microposts.build(micropost_params)
-    #ここで紐付かれたあたidと一緒に画像が画像データベースに保存される
+    #ここで紐付かれたidと一緒に画像が画像データベースに保存されるようにmicropostと関連したimageオブジェクトに画像が格納される
     @micropost.image.attach(params[:micropost][:image])
+    #画像は保存先に指定されたところに保存されそこのurlがmicropost_idといっしょにimageテーブルに格納される
     if @micropost.save
       flash[:success] = "Micropost created!"
       redirect_to root_url

@@ -27,7 +27,7 @@ class PasswordResetsController < ApplicationController
       @user.errors.add(:password, "can't be empty")
       render 'edit', status: :unprocessable_entity
     elsif @user.update(user_params)
-      #セッションを盗まれたことに気づいたユーザーが即座にパスワードをリセットするしない尾を想定してセッションを破壊
+      #セッションを盗まれたことに気づいたユーザーが即座にパスワードをリセットする場合を想定してセッションを破壊
       #ハイジャックされたセッションをこの操作で自動的に失効させる
       @user.forget
       #パスワードの再設定に成功したらブラウザバックでパスワード更新をできないようにする

@@ -1,7 +1,8 @@
 class Micropost < ApplicationRecord
   belongs_to :user
-  #active_storageで生成した画像テーブルと結びつける
+  #active_storageで生成した画像テーブルと結びつける(あたかもmicropostテーブルの一部のように扱う)
   #imageに対してvarientメソッドを使うことでリサイズしている(config/applicationでactive_storageにメソッドを接続)
+  #この段階ではvarientメソッドを設定していて再びimageオブジェクトから呼ばれた時にリサイズする
   has_one_attached :image do |attachable|
     attachable.variant :display, resize_to_limit: [500, 500]
   end

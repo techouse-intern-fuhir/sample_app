@@ -6,6 +6,7 @@
     <%= micropost.content %>
     <% if micropost.image.attached? %>
       <%# この時にリサイズされる %>
+      <%# 結果は以後の効率を高めるためにキャッシュされます %>
       <%= image_tag micropost.image.variant(:display) %>
     <% end %>
   </span>
