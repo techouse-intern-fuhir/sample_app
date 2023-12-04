@@ -1,6 +1,20 @@
 class User < ApplicationRecord
   #dependent destroy→ユーザーの破壊と同時にマイクロポストも破壊
   has_many :microposts, dependent: :destroy
+
+  #relationshipのfollower_idと関連付け(relationの別名としてactive_relationshipを使用)
+  has_many :active_relationships, class_name: "Relationship",
+                                 foreign_key: "follower_id",
+                                 dependent: :destroy
+  
+  has_many :passive_relationships, class_name: "Relationship",
+                                   foreign_key: "followed_id",
+                                   dependent: :destroy
+
+  #関連付けたactive_relationships(follower_id)を通してfollowing(user)を取得
+  has_many :following, through: :active_relationships, source: :followed
+  has_many :followers, through: :passive_relationships, source: :follower
+  
   #仮想remember_tokenを作成
   attr_accessor :remember_token, :activation_token, :reset_token
 
@@ -101,7 +115,22 @@ class User < ApplicationRecord
   #users画面でmicropostを利用するため
   def feed
     #?があることで、SQLクエリに代入する前にidがエスケープされるため、SQLインジェクション（SQL Injection）と呼ばれる深刻なセキュリティホールを回避できる
-    Micropost.where("user_id = ?", id)
+    Micropost.where("user_id IN (?) OR user_id = ?", following_ids, id)
+  end
+
+  #ユーザーをフォローする
+  def follow(other_user)
+    following << other_user unless self == other_user
+  end
+
+  #ユーザーをフォロー解除する
+  def unfollow(other_user)
+    following.delete(other_user)
+  end
+
+  #現在のユーザーが他のユーザーをフォローしていればtrueを返す
+  def following?(other_user)
+    following.include?(other_user)
   end
 
   private
