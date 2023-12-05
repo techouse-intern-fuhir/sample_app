@@ -13,6 +13,7 @@ class UserMailerTest < ActionMailer::TestCase
     assert_match user.activation_token, mail.body.encoded
 
     #CGI→特殊文字のエスケープ
+    #mail.bodyは外に送信するためにバイナリ(ACII)に変換してしまっているため、それをstringに変更している
     assert_match CGI.escape(user.email), mail.body.encoded
   end
 
@@ -24,6 +25,8 @@ class UserMailerTest < ActionMailer::TestCase
     assert_equal [user.email], mail.to
     assert_equal ["user@realdomain.com"], mail.from
     assert_match user.reset_token, mail.body.encoded
+
+    #html上ではescapeされている状態が書かれているためescapeさせている
     assert_match CGI.escape(user.email), mail.body.encoded
   end
 
