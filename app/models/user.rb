@@ -115,7 +115,17 @@ class User < ApplicationRecord
   #users画面でmicropostを利用するため
   def feed
     #?があることで、SQLクエリに代入する前にidがエスケープされるため、SQLインジェクション（SQL Injection）と呼ばれる深刻なセキュリティホールを回避できる
-    Micropost.where("user_id IN (?) OR user_id = ?", following_ids, id)
+    # Micropost.where("user_id IN (?) OR user_id = ?", following_ids, id)
+    #集合のロジックをrailsではなくデータベース側で処理することで効率が高まる
+    following_ids = "SELECT followed_id FROM relationships
+                     WHERE  follower_id = :user_id"
+
+    #パーシャル内でmiropost.user, micropost.userなどでここにクエリをデータベースに送信してしまうため
+    #最初に一度に読んでいる
+    #親子関係のデータリソースをまとめてDBから取得できるメソッド
+    Micropost.where("user_id IN (#{following_ids})
+                     OR user_id = :user_id", user_id: id)
+             .includes(:user, image_attachment: :blob)
   end
 
   #ユーザーをフォローする
