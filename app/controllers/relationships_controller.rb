@@ -18,7 +18,8 @@ class RelationshipsController < ApplicationController
 
     #turboをインストールしたため、標準リクエストがturbo_streamになった
     #respond_to内部のturbo_streamでキャッチする
-    #turbo_streamがない時にはhtmlリクエストとしてrespond_toを抜ける
+    #turbo_streamがない時にはhtmlリクエストとしてform.htmlで受ける
+    #turbo_streamがあるけど対になるviewがなかったらrespond_toを抜け出す
     respond_to do |format|
       format.html { redirect_to @user, status: :see_other }
       format.turbo_stream

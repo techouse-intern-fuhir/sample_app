@@ -127,9 +127,11 @@ class User < ApplicationRecord
                      OR user_id = :user_id", user_id: id)
              .includes(:user, image_attachment: :blob)
 
+    # part_of_feed = "followers_users.id = :id or microposts.user_id = :id"
     part_of_feed = "relationships.follower_id = :id or microposts.user_id = :id"
-    #micropostテーブルにuserテーブルのfollowersメソッドによって得られるrelationshipテーブル(本当は奥のuserまで行くがここのfollower_idを引き出して止まる)
-    #を結合させている
+    #micropostに対してuser.followersを発火することでmicropostテーブルに対してuser-relationships-userを結合させている
+    #userがふたつ重複してしまうため、ふたつめのuserはメソッド名と結合させて名前を作っている
+    #つまりmicropost-user(フォローされている側)-relationships-followers_users(フォローしている)
     Micropost.left_outer_joins(user: :followers)
              .where(part_of_feed, { id: id }).distinct
              .includes(:user, image_attachment: :blob)
