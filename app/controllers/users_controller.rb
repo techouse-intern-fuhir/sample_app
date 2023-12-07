@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   before_action :admin_user, only: :destroy
 
   def index
-    # :page→値がページ版後のハッシュを引数で受け取る
+    # :page→値がページ番号のハッシュを引数で受け取る
     # params[:page]→will_paginateによって自動的に渡される(nil→1)
     # paginate→:pageパラメーターに基づいて、データベースから一塊のデータを受け取る
     @users = User.where(activated: true).paginate(page: params[:page])

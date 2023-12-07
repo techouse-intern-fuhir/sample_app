@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  get 'password_resets/new'
-  get 'password_resets/edit'
+  # get 'password_resets/new'
+  # get 'password_resets/edit'
   root "static_pages#home"
   get "/help", to: "static_pages#help"
   get "/about", to: "static_pages#about"
@@ -10,7 +10,8 @@ Rails.application.routes.draw do
   post "/login", to:"sessions#create"
   delete "/logout", to: "sessions#destroy"
   resources :users do
-    #memberメソッド→ユーザーidを含むURLを扱うようになる
+    #memberメソッド→ユーザーidを含むURLを扱うようになる(resourceに対してidを含むrouteを形成する)
+    #collectメソッド→ユーザーに対して新しいメソッドを追加する(resourceに対して新しrouteを追加)
     member do
       get :following, :followers
     end
