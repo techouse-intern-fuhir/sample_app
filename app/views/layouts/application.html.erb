@@ -16,6 +16,8 @@
       <% end %>
       <%= yield %>
       <%= render 'layouts/footer' %>
+
+      <%# デバック情報が開発環境の時だけ見れるようになる %>
       <%= debug(params) if Rails.env.development? %>
     </div>
   </body>

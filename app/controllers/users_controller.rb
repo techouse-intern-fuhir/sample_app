@@ -21,6 +21,7 @@ class UsersController < ApplicationController
   end
 
   def new
+    # form_withに渡す
     @user = User.new
   end
 

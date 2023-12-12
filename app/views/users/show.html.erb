@@ -16,6 +16,9 @@
     <% if @user.microposts.any? %>
       <%# count→数を返す, length→全て読み込んで配列を作りその配列の長さを返す %>
       <h3>Microposts (<%= @user.microposts.count %>)</h3>
+
+      <%# ある順序（新しい順）があるためそれに従って出てくるmicropostsをその順序どうりに並べてくれる→<ol></ol> %>
+      <%# →ulは順序とか適当に描写する %>
       <ol class="microposts">
         <%= render @microposts %>
       </ol>

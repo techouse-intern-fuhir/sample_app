@@ -3,6 +3,7 @@ class SessionsController < ApplicationController
   end
 
   def create
+    #userをインスタンス変数にすることによってテストからアクセスできるようにする
     @user = User.find_by(email: params[:session][:email].downcase)
     if @user && @user.authenticate(params[:session][:password])
       if @user.activated?
@@ -20,6 +21,7 @@ class SessionsController < ApplicationController
         redirect_to root_url
       end
     else
+      #flashはredirectの場合は、1回目だけ表示するがrenderの場合は新しいリクエストが呼ばれないためその次のページでも表示される
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new', status: :unprocessable_entity
     end

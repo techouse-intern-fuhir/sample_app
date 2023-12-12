@@ -22,6 +22,7 @@
               Account <b class="caret"></b>
             </a>
             <ul id="dropdown-menu" class="dropdown-menu">
+              <%# railsはcurrect_userがUserオブジェクトであることからcurrent_userがuser_path(current_user)であることを自動的に認識している %>
               <li><%= link_to "Profile", current_user %></li>
               <li><%= link_to "Settings", edit_user_path(current_user) %></li>
               <li class="divider"></li>

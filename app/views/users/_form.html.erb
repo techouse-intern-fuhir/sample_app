@@ -1,4 +1,7 @@
 <%# form_withはUser.new_record?で渡ってきた@userがデータベースに存在するか否かを確認してpost処理にするか、patch処理にするか決めている %>
+<%# @userのmodelの種類からルートやparamsの構造などを決定している→シュガーシンタックス %>
+<%# →form_withの(model:)での役割：　リダイレクト先の指定、name属性のハッシュによるグループ化、インスタンス変数によるpost,patchの指定,
+                                validation結果のhtmlへの伝播 %>
 <%= form_with(model: @user) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
 

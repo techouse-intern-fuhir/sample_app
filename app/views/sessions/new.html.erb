@@ -4,6 +4,7 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <%# scope→各inputのname属性をグループ化するのに使う %>
+    <%# url→リダイレクト先を示す %>
     <%= form_with(url: login_path, scope: :session) do |f| %>
 
       <%= f.label :email %>

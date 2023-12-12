@@ -1,10 +1,16 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+// マニフェストファイル
+// app/assets/stylesheetsに置かれたスタイルシートはapplication.cssの一部としてWebサイトのレイアウトに読み込まれる
+// scssはプリプロセッサによってcssに結合される
+
 /* mixins, variables, etc. */
 
+// 変数代入
 $gray-medium-light: #eaeaea;
 
+// 複数のスタイルをクラスのようにひとまとめにする方法
 @mixin box_sizing {
   -moz-box-sizing:    border-box;
   -webkit-box-sizing: border-box;

@@ -23,6 +23,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def update
+    #password属性は基本空欄でもvalid?でtrueになってしまうためそれを回避してかつ、errorsに正しいエラーを含める
     if params[:user][:password].empty?
       @user.errors.add(:password, "can't be empty")
       render 'edit', status: :unprocessable_entity
@@ -40,6 +41,7 @@ class PasswordResetsController < ApplicationController
       render 'edit', status: :unprocessable_entity
     end
   end
+
   private
 
   def user_params
@@ -48,6 +50,7 @@ class PasswordResetsController < ApplicationController
   end
     
   def get_user
+    #アクションに渡される前にもう一つ下のフィルタのvalid_userに渡される
     @user = User.find_by(email: params[:email])
   end
 

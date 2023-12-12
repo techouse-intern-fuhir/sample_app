@@ -7,7 +7,7 @@
       <%= render 'shared/error_messages', object: f.object %>
 
       <%# updateアクションで使用するためHTML内部に保存しておく %>
-      <%# params[:email]に保存される %>
+      <%# params[:email]に保存される→_tagがないとuserに保存される %>
       <%= hidden_field_tag :email, @user.email %>
 
       <%= f.label :password %>

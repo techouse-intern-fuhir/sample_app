@@ -1,3 +1,4 @@
+<%# CSS idを受け取り、そのidに対応する要素を、メソッドに渡されたERBのブロックを評価した結果で置き換える %>
 <%= turbo_stream.update "follow_form" do %>
   <%= render partial: "users/unfollow" %>
 <% end %>

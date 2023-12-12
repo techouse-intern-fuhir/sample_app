@@ -2,7 +2,12 @@ class User < ApplicationRecord
   #dependent destroy→ユーザーの破壊と同時にマイクロポストも破壊
   has_many :microposts, dependent: :destroy
 
+  #関連付けとはあるテーブルから関係性のあるテーブルに対して直接よびだしたり、その関係性を明示した状態でレコードできること
   #relationshipのfollower_idと関連付け(relationの別名としてactive_relationshipを使用)
+  #relationに対して別名を使う理由としては多対多の相手同士が同じモデルであるため、それぞれどの方向で呼び出しているのかを明確にするため
+  #foeign_key→一般的にリレーションを作る時には自身のテーブルの名前からsをとりそれに_idをつけるがrelationテーブルでは親がどちらもuserテーブル
+    #であるためその親を表すkey名がそれぞれfollower_id, followed_idとなっていたから
+  #class_name→リレーション相手となるモデルのクラス名を記述、普通クラス名は指定されたリレーション相手のテーブルの名前からモデル名が推測される
   has_many :active_relationships, class_name: "Relationship",
                                  foreign_key: "follower_id",
                                  dependent: :destroy
@@ -11,11 +16,13 @@ class User < ApplicationRecord
                                    foreign_key: "followed_id",
                                    dependent: :destroy
 
-  #関連付けたactive_relationships(follower_id)を通してfollowing(user)を取得
+  #関連付けたactive_relationships(follower_id)を通してfollowing(user)を取得(relationshipモデルのfollowerメソッドを使用)
   has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
   
-  #仮想remember_tokenを作成
+  #仮想remember_tokenを作成→cookieのremember_tokenとdbのremember_digestを橋渡し
+  #仮想activation_tokenを作成→mail内のactivation_tokenとdbのactivation_digestの橋渡し
+  #仮想reset_token→activation_tokenと同じ
   attr_accessor :remember_token, :activation_token, :reset_token
 
   #メソッド参照→メソッドを探索して実行する
@@ -33,6 +40,10 @@ class User < ApplicationRecord
                     # uniqueness: { case_sensitive: false }
                     uniqueness: true
 
+  #できるようになること→セキュアにハッシュ化したパスワードをpassword_digestに保存できるようになる
+                 #二つの仮想属性password, password_confimationが使えるようになる
+                 #authenticateメソッドが使えるようになる(内部でパスワードを比較している)
+  #仮想属性→データベース上には存在していないがモデル上には存在する属性のこと
   has_secure_password
 
   validates :password, presence: true,
@@ -65,13 +76,14 @@ class User < ApplicationRecord
     #send→引数名の関数を呼び出している(レシーバーが省略されるとself)
     digest = send("#{attribute}_digest")
     return false if digest.nil?
-    #BCrypt::Password.new(remember_digest).is_password?(remember_token)→比較演算子が再定義されている
+    #BCrypt::Password.new(remember_digest).is_password?(remember_token)→remember_tokenに対して比較演算子が再定義されている
     BCrypt::Password.new(digest).is_password?(token)
   end
 
   #ユーザーのログイン情報を破棄する
   #selfが省略されている
   def forget
+    #validationは行われない
     update_attribute(:remember_digest, nil)
   end
 
@@ -96,7 +108,7 @@ class User < ApplicationRecord
   #パスワード再設定の属性を設定する
   def create_reset_digest
     self.reset_token = User.new_token
-    #コールバックが呼び出されない
+    #コールバックが呼び出されない、validationも呼び出さない
     update_columns(reset_digest: User.digest(reset_token), reset_sent_at: Time.zone.now)
   end
 
